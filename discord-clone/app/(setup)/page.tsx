@@ -1,3 +1,4 @@
+import InitialModal from '@/components/modals/initial-modal'
 import { db } from '@/lib/db'
 import { initialProfile } from '@/lib/initial-profile'
 import { Profile } from '@prisma/client'
@@ -20,7 +21,7 @@ const SetupPage = async () => {
     return redirect(`/servers/${server.id}`)
   }
 
-  return <div>Create a server</div>
+  return <InitialModal />
 }
 
 export default SetupPage
