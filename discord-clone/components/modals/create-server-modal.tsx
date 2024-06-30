@@ -1,33 +1,33 @@
 "use client";
 
-import axios from "axios";
 import * as z from "zod";
+import axios from "axios";
+import { Server } from "@prisma/client";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Dialog,
-  DialogContent,
-  DialogDescription,
+  DialogTitle,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogContent,
+  DialogDescription,
 } from "@/components/ui/dialog";
-
 import {
   Form,
-  FormControl,
-  FormField,
   FormItem,
   FormLabel,
+  FormField,
+  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/file-upload";
-import { useRouter } from "next/navigation";
-import { Server } from "@prisma/client";
 import { useModal } from "@/hooks/use-modal-store";
+
 const formSchema = z.object({
   name: z.string().min(1, {
     message: "Server name is required.",
@@ -36,6 +36,7 @@ const formSchema = z.object({
     message: "Server image is required.",
   }),
 });
+
 export const CreateServerModal = () => {
   const { isOpen, type, onClose, onOpen } = useModal();
   const router = useRouter();
