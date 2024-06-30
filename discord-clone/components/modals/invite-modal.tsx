@@ -13,23 +13,39 @@ import { Button } from "../ui/button";
 import { Check, Copy, RefreshCw } from "lucide-react";
 import { useOrigin } from "@/hooks/use-origin";
 import { useState } from "react";
+import axios from "axios";
 
 export const InviteModal = () => {
   const origin = useOrigin();
-  const { isOpen, type, onClose, data } = useModal();
+  const { isOpen, type, onClose, data, onOpen } = useModal();
 
   const [copied, setCopied] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { server } = data;
   const inviterUrl = `${origin}/invite/${server?.inviteCode}`;
 
-  const handleCopy = () => {
+  const onCopy = () => {
     navigator.clipboard.writeText(inviterUrl);
     setCopied(true);
 
     setTimeout(() => {
       setCopied(false);
     }, 1000);
+  };
+
+  const onNew = async () => {
+    try {
+      setIsLoading(true);
+
+      const res = await axios.patch(`/api/servers/${server?.id}/invite-code`);
+
+      onOpen("invite", { server: res.data });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -48,11 +64,12 @@ export const InviteModal = () => {
 
           <div className="flex items-cente mt-2 gap-x-2">
             <Input
+              disabled={isLoading}
               value={inviterUrl}
               className="bg-zinc-300/50 border-0 focus-visible:ronge-0 text-black focus-visible:ring-offset-0"
             />
 
-            <Button size="icon" onClick={handleCopy}>
+            <Button size="icon" onClick={onCopy} disabled={isLoading}>
               {copied ? (
                 <Check className="w-4 h-4" />
               ) : (
@@ -64,7 +81,9 @@ export const InviteModal = () => {
           <Button
             size="sm"
             variant="link"
+            onClick={onNew}
             className="text-xs text-zinc-500 mt-4"
+            disabled={isLoading}
           >
             Generate a new link
             <RefreshCw className="w-4 h-4 ml-2" />
