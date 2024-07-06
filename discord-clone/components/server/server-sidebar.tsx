@@ -5,12 +5,13 @@ import { Hash, Mic, ShieldCheck, Video } from "lucide-react";
 import { db } from "@/lib/db";
 import { currentProfile } from "@/lib/current-profile";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 import { ServerHeader } from "./server-header";
 import { ServerSearch } from "./server-search";
-import { Separator } from "../ui/separator";
 import { ServerSection } from "./server-section";
 import { ServerChannel } from "./server-channel";
+import { ServerMember } from "./server-member";
 
 interface ServerSidebarProps {
   serverId: string;
@@ -178,6 +179,20 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
                 server={server}
                 role={role}
               />
+            ))}
+          </div>
+        )}
+
+        {!!members?.length && (
+          <div className="mb-2">
+            <ServerSection
+              sectionType="members"
+              role={role}
+              label="Members"
+              server={server}
+            />
+            {members.map((member) => (
+              <ServerMember key={member.id} member={member} server={server} />
             ))}
           </div>
         )}
