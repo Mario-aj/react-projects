@@ -10,7 +10,6 @@ interface MobileToggleProps {
 }
 
 export const MobileToggle = ({ serverId }: MobileToggleProps) => {
-  console.log({ serverId });
   return (
     <Sheet>
       <SheetTrigger asChild>
