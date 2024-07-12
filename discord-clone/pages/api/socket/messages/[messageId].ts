@@ -1,10 +1,9 @@
 import { NextApiRequest } from "next";
+import { MemberRole } from "@prisma/client";
 
+import { db } from "@/lib/db";
 import { NextApiResponseServerIO } from "@/types";
 import { currentProfilePages } from "@/lib/current-profile-pages";
-import { error } from "console";
-import { db } from "@/lib/db";
-import { MemberRole } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
@@ -127,7 +126,7 @@ export default async function handler(
       });
     }
 
-    const updateKey = `chat:${channelId}:message:update`;
+    const updateKey = `chat:${channelId}:messages:update`;
 
     res?.socket?.server?.io?.emit(updateKey, message);
 

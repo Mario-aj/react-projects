@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { io as ClientIO } from "socket.io-client";
+import { io as ClientIO, Socket } from "socket.io-client";
 
 type SocketContextType = {
   socket: any | null;
@@ -30,17 +30,14 @@ export const useSocket = () => {
 };
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
-  const [socket, setSocket] = useState(null);
+  const [socket, setSocket] = useState<Socket<any, any> | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const socketInstance = new (ClientIO as any)(
-      process.env.NEXT_PUBLIC_SITE_URL!,
-      {
-        path: "/api/socket/io",
-        addTrailingSlash: false,
-      }
-    );
+    const socketInstance = ClientIO(process.env.NEXT_PUBLIC_SITE_URL!, {
+      path: "/api/socket/io",
+      addTrailingSlash: false,
+    });
 
     socketInstance.on("connect", () => {
       setIsConnected(true);

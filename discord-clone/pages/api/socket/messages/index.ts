@@ -1,8 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
+// import { Server as NetServer } from "http";
+// import { Server as ServerIO } from "socket.io";
 
-import { currentProfilePages } from "@/lib/current-profile-pages";
 import { db } from "@/lib/db";
 import { NextApiResponseServerIO } from "@/types";
+import { currentProfilePages } from "@/lib/current-profile-pages";
 
 export default async function handler(
   req: NextApiRequest,
@@ -88,6 +90,7 @@ export default async function handler(
 
     // trigger the message to all users connectd via socket in this key
     const channelKey = `chat:${channelId}:messages`;
+
     res?.socket?.server?.io?.emit(channelKey, message);
 
     return res.status(200).json(message);

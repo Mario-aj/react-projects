@@ -15,12 +15,7 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIO) => {
       addTrailingSlash: false,
     });
 
-    res.socket = {
-      // @ts-ignore
-      server: {
-        io,
-      },
-    };
+    res.socket = Object.assign(res.socket, { server: { io } });
   }
 
   res
