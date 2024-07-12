@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Fragment } from "react";
+import { ElementRef, Fragment, useRef } from "react";
 import { Loader2, ServerCrash } from "lucide-react";
 import { Member, Message, Profile } from "@prisma/client";
 
@@ -42,6 +42,9 @@ export const ChatMessages = ({
   paramValue,
   type,
 }: ChatMessageProps) => {
+  const chatRef = useRef<ElementRef<"div">>(null);
+  const buttomRef = useRef<ElementRef<"div">>(null);
+
   const queryKey = `chat:${chatId}`;
   const addKey = `chat:${chatId}:messages`;
   const updateKey = `chat:${chatId}:messages:update`;
@@ -76,10 +79,24 @@ export const ChatMessages = ({
   }
 
   return (
-    <div className="flex-1 flex flex-col py-4 overflow-y-auto">
-      <div className="flex-1" />
+    <div ref={chatRef} className="flex-1 flex flex-col py-4 overflow-y-auto">
+      {!hasNextPage && <div className="flex-1" />}
+      {!hasNextPage && <ChatWelcome type={type} name={name} />}
 
-      <ChatWelcome type={type} name={name} />
+      {hasNextPage && (
+        <div className="flex justify-center">
+          {isFetchingNextPage ? (
+            <Loader2 className="h-6 w-6 text-zinc-500 animate-spin my-4" />
+          ) : (
+            <button
+              onClick={() => fetchNextPage()}
+              className="text-zinc-500 hover:text-zinc-600 dark:text0zinc-400 text-xs dark:hover:text-zinc-300 my-4 transition"
+            >
+              Load previous messages
+            </button>
+          )}
+        </div>
+      )}
 
       <div className="flex flex-col-reverse mt-auto">
         {data?.pages?.map((group, idx) => (
@@ -102,6 +119,8 @@ export const ChatMessages = ({
           </Fragment>
         ))}
       </div>
+
+      <div ref={buttomRef} />
     </div>
   );
 };
