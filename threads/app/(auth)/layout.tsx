@@ -17,8 +17,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} bg-dark-1`}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${inter.className} bg-dark-1`}>{children}</body>
+      </html>
+    </ClerkProvider>
   );
 }
