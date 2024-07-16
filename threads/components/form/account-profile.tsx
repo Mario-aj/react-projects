@@ -2,9 +2,10 @@
 
 import * as z from "zod";
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
+import { ChangeEvent, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { usePathname, useRouter } from "next/navigation";
 
 import { userValidation } from "@/lib/validations/user";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useUploadThing } from "@/lib/uploadthing";
 import { isBase64Image } from "@/lib/utils";
+import updateUser from "@/lib/actions/user.actions";
 
 interface Props {
   user: {
@@ -35,6 +37,8 @@ interface Props {
 export const AccountProfile = ({ user, buttonTitle }: Props) => {
   const [files, setFiles] = useState<File[]>([]);
   const { startUpload } = useUploadThing("media");
+  const router = useRouter();
+  const pathname = usePathname();
 
   const form = useForm({
     resolver: zodResolver(userValidation),
@@ -85,7 +89,24 @@ export const AccountProfile = ({ user, buttonTitle }: Props) => {
         values.profile_photo = imgResponse[0].url;
       }
     }
+
+    await updateUser({
+      userId: user.id,
+      username: values.username,
+      bio: values.bio,
+      name: values.name,
+      image: values.profile_photo,
+      path: pathname,
+    });
+
+    if (pathname === "/profile/edit") {
+      router.back();
+    } else {
+      router.push("/");
+    }
   }
+
+  const isLoading = form.formState.isSubmitting;
 
   return (
     <Form {...form}>
@@ -122,6 +143,7 @@ export const AccountProfile = ({ user, buttonTitle }: Props) => {
 
               <FormControl className="flex-1 text-base-semibold text-gray-200">
                 <Input
+                  disabled={isLoading}
                   type="file"
                   accept="image/*"
                   placeholder="Upload a photo"
@@ -144,6 +166,7 @@ export const AccountProfile = ({ user, buttonTitle }: Props) => {
 
               <FormControl>
                 <Input
+                  disabled={isLoading}
                   type="text"
                   className="account-form_input no-focus"
                   {...field}
@@ -164,6 +187,7 @@ export const AccountProfile = ({ user, buttonTitle }: Props) => {
 
               <FormControl>
                 <Input
+                  disabled={isLoading}
                   type="text"
                   className="account-form_input no-focus"
                   {...field}
@@ -184,6 +208,7 @@ export const AccountProfile = ({ user, buttonTitle }: Props) => {
 
               <FormControl>
                 <Textarea
+                  disabled={isLoading}
                   rows={10}
                   className="account-form_input no-focus"
                   {...field}
@@ -192,7 +217,7 @@ export const AccountProfile = ({ user, buttonTitle }: Props) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-primary-500">
+        <Button type="submit" className="bg-primary-500" disabled={isLoading}>
           Submit
         </Button>
       </form>
