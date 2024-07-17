@@ -19,7 +19,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} bg-dark-1`}>{children}</body>
+        <body
+          style={{ height: "100vh" }}
+          className={`${inter.className} bg-dark-1 flex items-center justify-center`}
+        >
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );
