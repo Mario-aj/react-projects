@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 
 const threadSchema = new mongoose.Schema({
   text: { type: String, required: true },
@@ -27,4 +27,6 @@ const threadSchema = new mongoose.Schema({
 });
 
 const Thread = mongoose.models.Thread || mongoose.model("Thread", threadSchema);
+
+export type ThreadType = InferSchemaType<typeof threadSchema>;
 export default Thread;

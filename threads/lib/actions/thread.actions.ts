@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import User from "@/lib/models/user.model";
 import { connectToDB } from "@/lib/mongoose";
-import Thread from "@/lib/models/thread.model";
+import Thread, { ThreadType } from "@/lib/models/thread.model";
 
 interface Params {
   text: string;
@@ -71,7 +71,7 @@ export const getThreads = async (page = 1, limit = 10) => {
       parentId: { $in: [null, undefined] },
     });
 
-    const threads = await threadsQuery.exec();
+    const threads = (await threadsQuery.exec()) as unknown as ThreadType[];
 
     const hasNext = totalThreadsCount > skipAmount + threads.length;
 
@@ -88,7 +88,7 @@ export async function fetchThreadById(threadId: string) {
   await connectToDB();
 
   try {
-    const thread = await Thread.findById(threadId)
+    const thread = (await Thread.findById(threadId)
       .populate({
         path: "author",
         model: User,
@@ -113,7 +113,7 @@ export async function fetchThreadById(threadId: string) {
           },
         ],
       })
-      .exec();
+      .exec()) as unknown as ThreadType;
 
     return thread;
   } catch (error: any) {
