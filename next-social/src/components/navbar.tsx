@@ -19,7 +19,7 @@ export const Navbar = () => {
         </Link>
       </div>
 
-      <div className="hidden md:flex w-[50%]">
+      <div className="hidden md:flex w-[50%] items-center justify-between">
         <div className="flex gap-6 text-gray-600 text-sm">
           <Link href="/" className="flex gap-2 items-center">
             <Image
@@ -54,6 +54,15 @@ export const Navbar = () => {
             <span>Stories</span>
           </Link>
         </div>
+
+        <div className="hidden xl:flex bg-slate-100 items-center rounded-xl p-2">
+          <input
+            type="text"
+            placeholder="search..."
+            className="bg-transparent outline-none"
+          />
+          <Image src="/search.png" alt="search icon" width={14} height={14} />
+        </div>
       </div>
 
       <div className="w-[30%] flex items-center gap-4 xl:gap-8 justify-end">
@@ -67,8 +76,8 @@ export const Navbar = () => {
               <Image
                 src="/people.png"
                 alt="people icon"
-                width={20}
-                height={20}
+                width={24}
+                height={24}
               />
             </div>
 
