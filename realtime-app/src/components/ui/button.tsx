@@ -8,7 +8,7 @@ const buttonVariants = cva(
   {
     variants: {
       varint: {
-        default: "bg-slate-900 text0white hover:bg-slate-800",
+        default: "bg-slate-900 text-white hover:bg-slate-800",
         ghost: "",
       },
       size: {
@@ -44,7 +44,7 @@ export const Button = ({
       disabled={isLoading}
       {...props}
     >
-      {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-ping" /> : null}
+      {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
       {children}
     </button>
   );
