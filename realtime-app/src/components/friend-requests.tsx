@@ -22,7 +22,7 @@ export const FriendRequests = ({
 
   const acceptFriend = async (senderId: string) => {
     try {
-      await axios.post("/api/requests/accept", { id: senderId });
+      await axios.post("/api/friends/accept", { id: senderId });
 
       setFriendRequests((prev) =>
         prev.filter((req) => req.senderId !== senderId)
@@ -36,7 +36,7 @@ export const FriendRequests = ({
 
   const denyFriend = async (senderId: string) => {
     try {
-      await axios.post("/api/requests/deny", { id: senderId });
+      await axios.post("/api/friends/deny", { id: senderId });
 
       setFriendRequests((prev) =>
         prev.filter((req) => req.senderId !== senderId)
