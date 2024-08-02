@@ -60,7 +60,7 @@ export const FriendRequests = ({
             <p className="font-semibold text-lg">{request.senderEmail}</p>
 
             <button
-              onClick={() => denyFriend(request.senderId)}
+              onClick={() => acceptFriend(request.senderId)}
               aria-label="accept friend"
               className="w-8 h-8 bg-indigo-600 hover:bg-indigo-700 grid place-items-center rounded-full transition hover:shadow-md"
             >

@@ -5,9 +5,9 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-export async function Post(req: Request) {
+export async function POST(req: Request) {
   try {
-    const body = req.json();
+    const body = await req.json();
 
     const { id: idToAdd } = z.object({ id: z.string() }).parse(body);
 
@@ -46,7 +46,7 @@ export async function Post(req: Request) {
     return NextResponse.json({});
   } catch (error: any) {
     if (error instanceof z.ZodError) {
-      return new NextResponse("Invalide request payload", { status: 402 });
+      return new NextResponse("Invalide request payload", { status: 422 });
     }
 
     return new NextResponse("Internal Server Error", { status: 500 });
