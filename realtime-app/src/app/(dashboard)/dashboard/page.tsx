@@ -5,5 +5,5 @@ import { authOptions } from "@/lib/auth";
 export default async function Page() {
   const session = await getServerSession(authOptions);
 
-  return <pre>{JSON.stringify(session)}</pre>;
+  return <pre>Dashboard</pre>;
 }
