@@ -1,8 +1,9 @@
-import { authOptions } from "@/lib/auth";
-import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import * as z from "zod";
+
+import { db } from "@/lib/db";
+import { authOptions } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
