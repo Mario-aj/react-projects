@@ -3,14 +3,15 @@
 import { Fragment, useState } from "react";
 import slugify from "slugify";
 import { v4 as uuid } from "uuid";
+import { toast } from "sonner";
 
 import { ImageUpload } from "@/components/image-upload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Typography } from "@/components/ui/typography";
 import { useCreateWorkspaceValues } from "@/hooks/use-create-workspace-values";
-import { create } from "domain";
 import { createWorkspace } from "@/actions/create-workspace";
+import { useRouter } from "next/navigation";
 
 export default function CreateWorkspace() {
   const { currStep } = useCreateWorkspaceValues();
@@ -78,23 +79,28 @@ const Step2 = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async () => {
-    try {
-      setIsSubmitting(false);
-      const slug = slugify(name);
-      const inviteCode = uuid();
+  const router = useRouter();
 
-      const error = await createWorkspace({
-        name,
-        slug,
-        inviteCode,
-        imageUrl: imageUrl,
-      });
-    } catch (error) {
-      console.log("[CREATE_WORKSPACE_ERROR]", error);
-    } finally {
-      setIsSubmitting(false);
+  const handleSubmit = async () => {
+    setIsSubmitting(false);
+    const slug = slugify(name);
+    const inviteCode = uuid();
+
+    const error = await createWorkspace({
+      name,
+      slug,
+      inviteCode,
+      imageUrl: imageUrl,
+    });
+    setIsSubmitting(false);
+
+    if (error?.error) {
+      console.log("[CREATE_WORKSPACE_EROR]: ", error);
+      return toast.error("Couldn't create workspace. Please ry again.");
     }
+
+    toast.success("Workspace created successfully");
+    router.push("/");
   };
 
   return (
@@ -129,6 +135,7 @@ const Step2 = () => {
                 updateImageUrl("");
                 handleSubmit();
               }}
+              disabled={isSubmitting}
             >
               <Typography text="Skip for now" variants="p" />
             </Button>
@@ -139,6 +146,7 @@ const Step2 = () => {
                 onClick={handleSubmit}
                 size="sm"
                 variant="destructive"
+                disabled={isSubmitting}
               >
                 <Typography text="Submit" variants="p" />
               </Button>
@@ -147,6 +155,7 @@ const Step2 = () => {
                 type="button"
                 size="sm"
                 className="text-white bg-gray-500"
+                disabled={isSubmitting}
               >
                 <Typography text="Select an image" variants="p" />
               </Button>
